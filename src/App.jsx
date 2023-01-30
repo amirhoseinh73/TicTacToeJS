@@ -5,7 +5,7 @@ import "./style.css";
 const App = () => {
   return (
     <div>
-      <h1>Tic Toc Toe!</h1>
+      <h1 className="main-title">Tic Toc Toe!</h1>
       <Main />
     </div>
   );
