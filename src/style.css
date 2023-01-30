@@ -62,13 +62,12 @@ button {
 
   width: 100%;
   height: 100%;
-
-  position: relative;
 }
 
 .times,
 .circle {
-  background-color: transparent;
+  /* background-color: transparent; */
+  position: relative;
 }
 
 .times::after,
@@ -91,7 +90,11 @@ button {
 
 .times::after {
   content: "\00D7";
-  font-size: calc(var(--cell-size)/2);
+  font-size: calc(var(--cell-size));
   font-weight: 900;
   color: var(--color-user-2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: -1rem;
 }
