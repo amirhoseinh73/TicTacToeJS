@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-import Buttons from "./Buttons.jsx"
 
 const Main = () => {
   //default state of houses
@@ -13,6 +12,7 @@ const Main = () => {
   const [state, setState] = useState(defaultState)
   const [clicked, setClicked] = useState(false)
   const [dup, setDup] = useState(0)
+  const [isFinish, setIsFinish] = useState(false)
 
   const click = e => {
     if (clicked) return
@@ -42,26 +42,28 @@ const Main = () => {
   }
 
   useEffect(() => {
+    if (isFinish) return
     setRandomId(randomNumber())
-  }, [dup])
+  }, [dup, isFinish])
 
   useEffect(() => {
-    console.log(dup)
+    if (isFinish) return
     if (!clicked) return
 
+    if (state.every(cell => Boolean(cell.user))) setIsFinish(true)
+
     const cell = state.find(cell => cell.id === randomId)
-    if (cell.user) setDup(dup + 1)
-    else {
-      const updatedState = state.map(item => {
-        if (item.id !== randomId) return item
+    if (cell.user) return setDup(dup + 1)
 
-        return { ...item, user: 2 }
-      })
+    const updatedState = state.map(item => {
+      if (item.id !== randomId) return item
 
-      setState(updatedState)
-      setClicked(false)
-    }
-  }, [randomId, clicked, state])
+      return { ...item, user: 2 }
+    })
+
+    setState(updatedState)
+    setClicked(false)
+  }, [randomId, clicked, state, dup, isFinish])
 
   return (
     <article className="main">
@@ -78,11 +80,18 @@ const Main = () => {
           </section>
         ))}
       </div>
-      <Buttons
-        setHouses={setState}
-        state={defaultState}
-        setClicked={setClicked}
-      />
+      <button
+        type="button"
+        className="btn-again"
+        onClick={() => {
+          setState(defaultState)
+          setClicked(false)
+          setDup(0)
+          setIsFinish(false)
+        }}
+      >
+        Again
+      </button>
     </article>
   )
 }
