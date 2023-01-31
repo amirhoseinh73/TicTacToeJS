@@ -7,7 +7,8 @@
 
 :root {
   --color-dark: #333333;
-  --color-background: skyblue;
+  --color-background: #87ceeb;
+  --color-background-transparent: #87ceebaa;
 
   --color-user-1: #be4848;
   --color-user-2: #3add89;
@@ -38,6 +39,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 }
 
 .grid {
@@ -59,15 +61,20 @@ body {
 button {
   appearance: none;
   border: 0;
-
-  width: 100%;
-  height: 100%;
 }
 
+.empty,
 .times,
 .circle {
-  /* background-color: transparent; */
   position: relative;
+  width: 100%;
+  height: 100%;
+  transition: all 300ms linear;
+}
+
+.empty::after {
+  content: "";
+  transform: scale(0);
 }
 
 .times::after,
@@ -81,6 +88,8 @@ button {
   margin: auto;
   width: calc(var(--cell-size)/2);
   height: calc(var(--cell-size)/2);
+  transition: transform 300ms linear;
+  transform: scale(1);
 }
 
 .circle::after {
@@ -97,4 +106,16 @@ button {
   justify-content: center;
   align-items: center;
   top: -1rem;
+}
+
+.btn-again {
+  margin-top: 4rem;
+  background-color: var(--color-background-transparent);
+  padding: 1rem 2rem;
+  font-size: 1.5rem;
+  border-radius: 0.25rem;
+}
+
+.btn-again:active {
+  background-color: var(--color-background);
 }
