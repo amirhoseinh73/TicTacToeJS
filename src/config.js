@@ -1,0 +1,8 @@
+export const WIN_PLAN_1 = [1, 2, 3]
+export const WIN_PLAN_2 = [4, 5, 6]
+export const WIN_PLAN_3 = [7, 8, 9]
+export const WIN_PLAN_4 = [1, 4, 7]
+export const WIN_PLAN_5 = [2, 5, 8]
+export const WIN_PLAN_6 = [3, 6, 9]
+export const WIN_PLAN_7 = [1, 5, 9]
+export const WIN_PLAN_8 = [3, 5, 7]
