@@ -20,10 +20,13 @@ const Main = () => {
     const id = Number(e.target.closest(".cell").dataset.id)
     if (!id) return
 
-    const updatedState = state.map(item => {
-      if (item.id !== id) return item
+    const cell = state.find(cell => cell.id === id && !cell.user)
+    if (!cell) return
 
-      return { ...item, user: 1 }
+    const updatedState = state.map(cell => {
+      if (cell.id !== id || cell.user) return cell
+
+      return { ...cell, user: 1 }
     })
 
     setState(updatedState)
@@ -50,8 +53,12 @@ const Main = () => {
       return { ...item, user: 2 }
     })
 
-    setState(updatedState)
-    setClicked(false)
+    const timeOut = setTimeout(() => {
+      setState(updatedState)
+      setClicked(false)
+    }, 1000)
+
+    return () => clearTimeout(timeOut)
   }, [randomId, clicked, state, dup, isFinish])
 
   return (
