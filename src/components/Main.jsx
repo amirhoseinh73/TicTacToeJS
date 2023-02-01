@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 const Main = () => {
   //default state of houses
@@ -14,20 +14,30 @@ const Main = () => {
   const [dup, setDup] = useState(0)
   const [isFinish, setIsFinish] = useState(false)
 
+  const getUpdatedState = useCallback(
+    (id, user) => {
+      const cell = state.find(cell => cell.id === id && !cell.user)
+      if (!cell) return false
+
+      const updatedState = state.map(cell => {
+        if (cell.id !== id || cell.user) return cell
+
+        return { ...cell, user: user }
+      })
+
+      return updatedState
+    },
+    [state]
+  )
+
   const click = e => {
     if (clicked) return
 
     const id = Number(e.target.closest(".cell").dataset.id)
     if (!id) return
 
-    const cell = state.find(cell => cell.id === id && !cell.user)
-    if (!cell) return
-
-    const updatedState = state.map(cell => {
-      if (cell.id !== id || cell.user) return cell
-
-      return { ...cell, user: 1 }
-    })
+    const updatedState = getUpdatedState(id, 1)
+    if (!updatedState) return
 
     setState(updatedState)
     setClicked(true)
@@ -44,14 +54,8 @@ const Main = () => {
 
     if (state.every(cell => Boolean(cell.user))) setIsFinish(true)
 
-    const cell = state.find(cell => cell.id === randomId)
-    if (cell.user) return setDup(dup + 1)
-
-    const updatedState = state.map(item => {
-      if (item.id !== randomId) return item
-
-      return { ...item, user: 2 }
-    })
+    const updatedState = getUpdatedState(randomId, 2)
+    if (!updatedState) return setDup(dup + 1)
 
     const timeOut = setTimeout(() => {
       setState(updatedState)
@@ -59,7 +63,7 @@ const Main = () => {
     }, 1000)
 
     return () => clearTimeout(timeOut)
-  }, [randomId, clicked, state, dup, isFinish])
+  }, [randomId, clicked, state, dup, isFinish, getUpdatedState])
 
   return (
     <article className="main">
