@@ -26,17 +26,6 @@ const Main = () => {
       return { ...item, user: 1 }
     })
 
-    // const cell = state.find(cell => cell.id === id)
-    // if (cell.user) return
-
-    // const cellIndex = state.findIndex(cell => cell.id === id)
-    // if (cellIndex < 0) return
-
-    // const newState = [...state]
-    // const newCell = { ...newState[cellIndex] }
-    // newCell.user = 1
-    // newState[cellIndex] = newCell
-
     setState(updatedState)
     setClicked(true)
   }
