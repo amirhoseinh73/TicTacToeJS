@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react"
 import { checkWinPlanMatch } from "../helper"
+import Alert from "./Alert.jsx"
 
 const Main = () => {
   //default state of houses
@@ -100,45 +101,65 @@ const Main = () => {
 
     const checkUser2Win = checkUserWin(2)
     if (checkUser2Win) return setIsUserWin(2)
-  }, [state, isFinish])
+  }, [state, isFinish, clicked])
 
   useEffect(() => {
     if (isFinish) return
-    if (isUserWin) {
-      console.log("user " + isUserWin + " wins")
-      return setIsFinish(true)
-    }
+
+    if (isUserWin) setIsFinish(true)
   }, [isUserWin, isFinish])
 
   return (
-    <article className="main">
-      <div className="grid">
-        {state.map(house => (
-          <section key={house.id} data-id={house.id} className="cell">
-            <button
-              type="button"
-              onClick={click}
-              className={
-                house.user ? (house.user === 1 ? "circle" : "times") : "empty"
-              }
-            ></button>
-          </section>
-        ))}
-      </div>
-      <button
-        type="button"
-        className="btn-again"
-        onClick={() => {
-          setState(defaultState)
-          setClicked(false)
-          setDup(0)
-          setIsFinish(false)
-          setIsUserWin(0)
-        }}
-      >
-        Again
-      </button>
-    </article>
+    <>
+      <Alert
+        message={
+          isFinish && !isUserWin
+            ? "Draw!"
+            : isUserWin === 1
+            ? "You Win!"
+            : isUserWin === 2
+            ? "You Lose!"
+            : ""
+        }
+        className={
+          isFinish && !isUserWin
+            ? "draw"
+            : isUserWin === 1
+            ? "win"
+            : isUserWin === 2
+            ? "lose"
+            : ""
+        }
+      />
+      <article className="main">
+        <div className="grid">
+          {state.map(house => (
+            <section key={house.id} data-id={house.id} className="cell">
+              <button
+                type="button"
+                onClick={click}
+                className={
+                  house.user ? (house.user === 1 ? "circle" : "times") : "empty"
+                }
+              ></button>
+            </section>
+          ))}
+        </div>
+        <button
+          type="button"
+          className="btn-again"
+          onClick={() => {
+            setState(defaultState)
+            setClicked(false)
+            setDup(0)
+            setIsFinish(false)
+            setIsUserWin(0)
+          }}
+        >
+          Again
+        </button>
+      </article>
+    </>
   )
 }
 
