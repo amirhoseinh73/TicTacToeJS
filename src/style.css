@@ -5,7 +5,9 @@
   --color-background-transparent: #87ceebaa;
 
   --color-user-1: #be4848;
+  --color-user-1-transparent: #be4848aa;
   --color-user-2: #3add89;
+  --color-user-2-transparent: #3add89aa;
 
   --cell-size: 10rem;
   --cell-space: 1rem;
@@ -110,7 +112,7 @@ button {
   top: -1rem;
 }
 
-.btn-again {
+.btn {
   margin-top: 4rem;
   background-color: var(--color-background-transparent);
   padding: 1rem 2rem;
@@ -120,6 +122,35 @@ button {
 
 .btn-again:active {
   background-color: var(--color-background);
+}
+
+.btn-difficulty {
+  margin: 0 0.5rem;
+}
+
+.difficulty-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+
+.btn-difficulty.easy {
+  background-color: var(--color-user-2);
+}
+
+.btn-difficulty.hard {
+  background-color: var(--color-user-1);
+}
+
+.btn-difficulty.easy:active {
+  background-color: var(--color-user-2-transparent);
+}
+
+.btn-difficulty.hard:active {
+  background-color: var(--color-user-1-transparent);
 }
 
 .message {
@@ -136,8 +167,16 @@ button {
   width: 100%;
   text-align: center;
   background-color: var(--color-dark-transparent);
+  pointer-events: none;
 }
 
+.message.small {
+  letter-spacing: 1rem;
+  font-size: 6rem;
+  color: var(--color-background);
+}
+
+.message.small,
 .message.lose,
 .message.win,
 .message.draw {

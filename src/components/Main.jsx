@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { checkWinPlanMatch } from "../helper"
 import Alert from "./Alert.jsx"
 
@@ -16,6 +16,7 @@ const Main = () => {
   const [dup, setDup] = useState(0)
   const [isFinish, setIsFinish] = useState(false)
   const [isUserWin, setIsUserWin] = useState(0)
+  const [difficulty, setDifficulty] = useState(null) // easy, hard
 
   const getUpdatedState = useCallback(
     (id, userID) => {
@@ -34,6 +35,7 @@ const Main = () => {
   )
 
   const click = e => {
+    if (!difficulty) return
     if (isFinish) return
     if (clicked) return
 
@@ -52,7 +54,9 @@ const Main = () => {
     setRandomId(randomNumber())
   }, [dup, isFinish])
 
+  //easy
   useEffect(() => {
+    if (difficulty !== "easy") return
     if (isFinish) return
     if (!clicked) return
 
@@ -67,7 +71,26 @@ const Main = () => {
     }, 1000)
 
     return () => clearTimeout(timeOut)
-  }, [randomId, clicked, state, dup, isFinish, getUpdatedState])
+  }, [randomId, clicked, state, dup, isFinish, getUpdatedState, difficulty])
+
+  //hard
+  useEffect(() => {
+    if (difficulty !== "hard") return
+    if (isFinish) return
+    if (!clicked) return
+
+    if (state.every(cell => Boolean(cell.user))) setIsFinish(true)
+
+    const cpuId = () => {}
+    const updatedState = getUpdatedState(cpuId(), 2)
+
+    const timeOut = setTimeout(() => {
+      setState(updatedState)
+      setClicked(false)
+    }, 1000)
+
+    return () => clearTimeout(timeOut)
+  }, [clicked, state, isFinish, getUpdatedState, difficulty])
 
   useEffect(() => {
     if (isFinish) return
@@ -113,7 +136,9 @@ const Main = () => {
     <>
       <Alert
         message={
-          isFinish && !isUserWin
+          !difficulty
+            ? "Choose diffifulty"
+            : isFinish && !isUserWin
             ? "Draw!"
             : isUserWin === 1
             ? "You Win!"
@@ -122,7 +147,9 @@ const Main = () => {
             : ""
         }
         className={
-          isFinish && !isUserWin
+          !difficulty
+            ? "small"
+            : isFinish && !isUserWin
             ? "draw"
             : isUserWin === 1
             ? "win"
@@ -132,6 +159,22 @@ const Main = () => {
         }
       />
       <article className="main">
+        <section className="difficulty-buttons">
+          <button
+            type="button"
+            className="btn btn-difficulty easy"
+            onClick={() => setDifficulty("easy")}
+          >
+            Easy
+          </button>
+          <button
+            type="button"
+            className="btn btn-difficulty hard"
+            onClick={() => setDifficulty("hard")}
+          >
+            Hard
+          </button>
+        </section>
         <div className="grid">
           {state.map(house => (
             <section key={house.id} data-id={house.id} className="cell">
@@ -147,13 +190,14 @@ const Main = () => {
         </div>
         <button
           type="button"
-          className="btn-again"
+          className="btn btn-again"
           onClick={() => {
             setState(defaultState)
             setClicked(false)
             setDup(0)
             setIsFinish(false)
             setIsUserWin(0)
+            setDifficulty(null)
           }}
         >
           Again
