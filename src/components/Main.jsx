@@ -164,6 +164,7 @@ const Main = () => {
         }
       />
       <article className="main">
+        <p className="score">difficulty: {difficulty}</p>
         <p className="score">Score: {score}</p>
         <section className="difficulty-buttons">
           <button
