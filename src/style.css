@@ -195,3 +195,9 @@ button {
 .lose {
   color: var(--color-user-1);
 }
+
+.score {
+  margin-bottom: 2rem;
+  font-size: 3rem;
+  color: var(--color-background);
+}

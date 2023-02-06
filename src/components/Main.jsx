@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react"
-import { checkWinPlanMatch } from "../helper"
+import { checkWinPlanMatch, cpuIdHard } from "../helper.js"
 import Alert from "./Alert.jsx"
 
 const Main = () => {
@@ -17,6 +17,7 @@ const Main = () => {
   const [isFinish, setIsFinish] = useState(false)
   const [isUserWin, setIsUserWin] = useState(0)
   const [difficulty, setDifficulty] = useState(null) // easy, hard
+  const [score, setScore] = useState(0)
 
   const getUpdatedState = useCallback(
     (id, userID) => {
@@ -81,8 +82,10 @@ const Main = () => {
 
     if (state.every(cell => Boolean(cell.user))) setIsFinish(true)
 
-    const cpuId = () => {}
-    const updatedState = getUpdatedState(cpuId(), 2)
+    const newID = cpuIdHard(randomId, state, setDup, dup)
+    if (!newID) return
+    const updatedState = getUpdatedState(newID, 2)
+    if (!updatedState) return setDup(dup + 1)
 
     const timeOut = setTimeout(() => {
       setState(updatedState)
@@ -90,7 +93,7 @@ const Main = () => {
     }, 1000)
 
     return () => clearTimeout(timeOut)
-  }, [clicked, state, isFinish, getUpdatedState, difficulty])
+  }, [clicked, state, isFinish, getUpdatedState, difficulty, dup, randomId])
 
   useEffect(() => {
     if (isFinish) return
@@ -128,9 +131,11 @@ const Main = () => {
 
   useEffect(() => {
     if (isFinish) return
+    if (!isUserWin) return
 
-    if (isUserWin) setIsFinish(true)
-  }, [isUserWin, isFinish])
+    setScore(score + 1)
+    setIsFinish(true)
+  }, [isUserWin, isFinish, score])
 
   return (
     <>
@@ -159,6 +164,7 @@ const Main = () => {
         }
       />
       <article className="main">
+        <p className="score">Score: {score}</p>
         <section className="difficulty-buttons">
           <button
             type="button"
@@ -197,7 +203,7 @@ const Main = () => {
             setDup(0)
             setIsFinish(false)
             setIsUserWin(0)
-            setDifficulty(null)
+            // setDifficulty(null)
           }}
         >
           Again
