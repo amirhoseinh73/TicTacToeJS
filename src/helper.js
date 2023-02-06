@@ -9,6 +9,18 @@ import {
   WIN_PLAN_8,
 } from "./config"
 
+// random number for cpu easy
+export const randomNumber = () => Math.trunc(Math.random() * 9) + 1
+
+const randomNumberRange = (...range) => {
+  const min = Math.min(...range)
+  const max = Math.max(...range)
+
+  const rand = Math.trunc(Math.random() * (max - min) + min)
+  if (!range.includes(rand)) return randomNumberRange(...range)
+  return rand
+}
+
 export const checkWinPlanMatch = userIds => {
   let checkWin = false
   checkWin = WIN_PLAN_1.every(id => userIds.indexOf(id) >= 0)
@@ -98,6 +110,12 @@ export const cpuIdHard = (randomId, state, setDup, dup) => {
   if (user1Ids.includes(7) && user1Ids.includes(8) && emptyCells.includes(9)) return 9 //prettier-ignore
   if (user1Ids.includes(7) && user1Ids.includes(9) && emptyCells.includes(8)) return 8 //prettier-ignore
   if (user1Ids.includes(8) && user1Ids.includes(9) && emptyCells.includes(7)) return 7 //prettier-ignore
+
+  //plan of winning user is 8,2,4,6
+  if (user1Ids.includes(2) && user1Ids.includes(4) && emptyCells.includes(1)) return randomNumberRange(1, 3, 7) //prettier-ignore
+  if (user1Ids.includes(2) && user1Ids.includes(6) && emptyCells.includes(3)) return randomNumberRange(1, 3, 9) //prettier-ignore
+  if (user1Ids.includes(4) && user1Ids.includes(8) && emptyCells.includes(7)) return randomNumberRange(1, 7, 9) //prettier-ignore
+  if (user1Ids.includes(6) && user1Ids.includes(8) && emptyCells.includes(9)) return randomNumberRange(3, 7, 9) //prettier-ignore
 
   return randomId
 }

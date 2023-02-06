@@ -1,14 +1,11 @@
 import React, { useCallback, useEffect, useState } from "react"
-import { checkWinPlanMatch, cpuIdHard } from "../helper.js"
+import { checkWinPlanMatch, cpuIdHard, randomNumber } from "../helper.js"
 import Alert from "./Alert.jsx"
 
 const Main = () => {
   //default state of houses
   const defaultState = []
   for (let i = 1; i <= 9; i++) defaultState.push({ id: i, user: null })
-
-  // random number for cpu easy
-  const randomNumber = () => Math.trunc(Math.random() * 9) + 1
 
   const [randomId, setRandomId] = useState(null)
   const [state, setState] = useState(defaultState)
