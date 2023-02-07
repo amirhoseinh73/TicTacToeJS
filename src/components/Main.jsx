@@ -15,6 +15,7 @@ const Main = () => {
   const [isUserWin, setIsUserWin] = useState(0)
   const [difficulty, setDifficulty] = useState(null) // easy, hard
   const [score, setScore] = useState(0)
+  const [rounds, setRounds] = useState(0)
 
   const getUpdatedState = useCallback(
     (id, userID) => {
@@ -58,7 +59,10 @@ const Main = () => {
     if (isFinish) return
     if (!clicked) return
 
-    if (state.every(cell => Boolean(cell.user))) setIsFinish(true)
+    if (state.every(cell => Boolean(cell.user))) {
+      setIsFinish(true)
+      setRounds(rounds + 1)
+    }
 
     const updatedState = getUpdatedState(randomId, 2)
     if (!updatedState) return setDup(dup + 1)
@@ -69,7 +73,16 @@ const Main = () => {
     }, 1000)
 
     return () => clearTimeout(timeOut)
-  }, [randomId, clicked, state, dup, isFinish, getUpdatedState, difficulty])
+  }, [
+    randomId,
+    clicked,
+    state,
+    dup,
+    isFinish,
+    getUpdatedState,
+    difficulty,
+    rounds,
+  ])
 
   //hard
   useEffect(() => {
@@ -77,9 +90,12 @@ const Main = () => {
     if (isFinish) return
     if (!clicked) return
 
-    if (state.every(cell => Boolean(cell.user))) setIsFinish(true)
+    if (state.every(cell => Boolean(cell.user))) {
+      setIsFinish(true)
+      setRounds(rounds + 1)
+    }
 
-    const newID = cpuIdHard(randomId, state, setDup, dup)
+    const newID = cpuIdHard(randomId, state)
     if (!newID) return
     const updatedState = getUpdatedState(newID, 2)
     if (!updatedState) return setDup(dup + 1)
@@ -90,7 +106,16 @@ const Main = () => {
     }, 1000)
 
     return () => clearTimeout(timeOut)
-  }, [clicked, state, isFinish, getUpdatedState, difficulty, dup, randomId])
+  }, [
+    clicked,
+    state,
+    isFinish,
+    getUpdatedState,
+    difficulty,
+    dup,
+    randomId,
+    rounds,
+  ])
 
   useEffect(() => {
     if (isFinish) return
@@ -130,9 +155,10 @@ const Main = () => {
     if (isFinish) return
     if (!isUserWin) return
 
-    setScore(score + 1)
+    if (isUserWin === 1) setScore(score + 1)
     setIsFinish(true)
-  }, [isUserWin, isFinish, score])
+    setRounds(rounds + 1)
+  }, [isUserWin, isFinish, score, rounds])
 
   return (
     <>
@@ -161,20 +187,32 @@ const Main = () => {
         }
       />
       <article className="main">
-        <p className="score">difficulty: {difficulty}</p>
-        <p className="score">Score: {score}</p>
+        <p className="score">
+          Difficulty: <abbr>{difficulty}</abbr>
+        </p>
+        <p className="score">
+          Rounds: <abbr>{rounds}</abbr> Score: <abbr>{score}</abbr>
+        </p>
         <section className="difficulty-buttons">
           <button
             type="button"
             className="btn btn-difficulty easy"
-            onClick={() => setDifficulty("easy")}
+            onClick={() => {
+              setDifficulty("easy")
+              setScore(0)
+              setRounds(0)
+            }}
           >
             Easy
           </button>
           <button
             type="button"
             className="btn btn-difficulty hard"
-            onClick={() => setDifficulty("hard")}
+            onClick={() => {
+              setDifficulty("hard")
+              setScore(0)
+              setRounds(0)
+            }}
           >
             Hard
           </button>
@@ -201,7 +239,6 @@ const Main = () => {
             setDup(0)
             setIsFinish(false)
             setIsUserWin(0)
-            // setDifficulty(null)
           }}
         >
           Again

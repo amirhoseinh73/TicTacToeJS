@@ -4,6 +4,7 @@
   --color-background: #87ceeb;
   --color-background-transparent: #87ceebaa;
 
+  --color-text: #0726a3;
   --color-user-1: #be4848;
   --color-user-1-transparent: #be4848aa;
   --color-user-2: #3add89;
@@ -156,9 +157,9 @@ button {
 .message {
   opacity: 0;
   position: fixed;
-  left: 50%;
-  top: 30%;
-  transform: translate(-50%, -50%) scale(0);
+  left: 0;
+  top: 8rem;
+  transform: scale(0);
   transition: all 500ms linear;
   z-index: 99;
   font-size: 12rem;
@@ -181,7 +182,7 @@ button {
 .message.win,
 .message.draw {
   opacity: 1;
-  transform: translate(-50%,-50%) scale(1);
+  transform: scale(1);
 }
 
 .draw {
@@ -199,5 +200,11 @@ button {
 .score {
   margin-bottom: 2rem;
   font-size: 3rem;
-  color: var(--color-background);
+  font-weight: 500;
+  color: var(--color-text);
+  text-transform: capitalize;
+}
+
+.score abbr {
+  font-weight: 900;
 }
